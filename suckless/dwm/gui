@@ -1,0 +1,59 @@
+import tkinter as tk
+from tkinter import ttk
+import re
+
+def toggle_checkbox(checkbox, status_var):
+    status = status_var.get()
+    if checkbox.instate(['selected']):
+        status += 1
+    else:
+        status -= 1
+    status_var.set(status)
+
+def read_patches_file(file_path, table):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+        checkbox_var = tk.IntVar()
+
+        for line in lines:
+            line = line.strip()
+
+            if line.startswith('/**'):
+                section_name = line[3:-2].strip()
+            elif line.startswith('/*') and line.endswith('*/'):
+                patch_description = line[2:-2].strip()
+                patch_description = remove_url_from_description(patch_description)
+            elif line.startswith('#define'):
+                patch_title = line.split()[1]
+                checkbox = ttk.Checkbutton(table, variable=checkbox_var, command=lambda: toggle_checkbox(checkbox, checkbox_var))
+                checkbox_var.set(0)
+                table.insert('', tk.END, values=(checkbox, patch_title, patch_description))
+
+def remove_url_from_description(description):
+    # Remove URLs from description using regular expressions
+    url_pattern = r'https?://\S+'
+    description = re.sub(url_pattern, '', description)
+    return description
+
+def main():
+    file_path = 'patches.def.h'
+
+    root = tk.Tk()
+    root.title("Patches Viewer")
+
+    status_var = tk.StringVar()
+    status_bar = ttk.Label(root, textvariable=status_var, anchor=tk.W)
+    status_bar.pack(side=tk.BOTTOM, fill=tk.X)
+
+    table = ttk.Treeview(root, columns=('Checkbox', 'Title', 'Description'), show='headings')
+    table.heading('Checkbox', text='Checkbox')
+    table.heading('Title', text='Title')
+    table.heading('Description', text='Description')
+    table.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    read_patches_file(file_path, table)
+
+    root.mainloop()
+
+if __name__ == '__main__':
+    main()
