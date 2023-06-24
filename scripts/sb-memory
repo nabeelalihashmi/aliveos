@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Get memory usage information using the free command
+memory_info=$(free -h)
+
+# Extract used memory information
+used_memory=$(grep -E "Mem:" <<< "$memory_info" | awk '{print $3}')
+
+# Display used memory
+echo "$used_memory"

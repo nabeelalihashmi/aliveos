@@ -11,7 +11,7 @@ pertagview(const Arg *arg)
 {
 	int i;
 
-	if (arg->ui == ~0)
+	if (arg->ui == ~SPTAGMASK)
 		selmon->pertag->curtag = 0;
 	else {
 		for (i = 0; !(selmon->tagset[selmon->seltags] & 1 << i); i++);

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Get the CPU frequency
+cpu_frequency=$(cpufreq-info | awk '/current CPU frequency/ {print $4}')
+
+# Get the CPU usage percentage
+cpu_usage=$(mpstat 1 1 | awk '/Average:/ {print 100 - $NF}')
+
+# Display CPU frequency and usage percentage
+echo "CPU Frequency: $cpu_frequency"
+echo "CPU Usage: $cpu_usage%"

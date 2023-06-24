@@ -13,7 +13,6 @@
 #include "bar_systray.h"
 
 /* Other patches */
-#include "alttab.h"
 #include "attachx.h"
 #include "autostart.h"
 #include "cfacts.h"
@@ -21,6 +20,7 @@
 #include "pertag.h"
 #include "placemouse.h"
 #include "restartsig.h"
+#include "scratchpad.h"
 #include "vanitygaps.h"
 #include "warp.h"
 /* Layouts */

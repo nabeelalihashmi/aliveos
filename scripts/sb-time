@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Get the current time
+current_time=$(date +"%H:%M")
+
+# Display the current time
+echo " $current_time"

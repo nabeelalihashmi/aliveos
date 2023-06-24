@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Get the current keymap using localectl
+keymap=$(localectl status | awk '/VC Keymap/ {print $3}')
+
+# Display the current keymap
+echo "Current Keymap: $keymap"

@@ -68,7 +68,10 @@
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define WTYPE                   "_NET_WM_WINDOW_TYPE_"
-#define TAGMASK                 ((1 << NUMTAGS) - 1)
+#define TOTALTAGS               (NUMTAGS + LENGTH(scratchpads))
+#define TAGMASK                 ((1 << TOTALTAGS) - 1)
+#define SPTAG(i)                ((1 << NUMTAGS) << (i))
+#define SPTAGMASK               (((1 << LENGTH(scratchpads))-1) << NUMTAGS)
 #define TEXTWM(X)               (drw_fontset_getwidth(drw, (X), True) + lrpad)
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X), False) + lrpad)
 #define HIDDEN(C)               ((getstate(C->win) == IconicState))
@@ -446,6 +449,10 @@ applyrules(Client *c)
 		{
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
+			if ((r->tags & SPTAGMASK) && r->isfloating) {
+				c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
+				c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
+			}
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
 				c->mon = m;
@@ -456,7 +463,7 @@ applyrules(Client *c)
 		XFree(ch.res_class);
 	if (ch.res_name)
 		XFree(ch.res_name);
-	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : c->mon->tagset[c->mon->seltags];
+	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK : (c->mon->tagset[c->mon->seltags] & ~SPTAGMASK);
 }
 
 int
@@ -646,7 +653,6 @@ cleanup(void)
 	Layout foo = { "", NULL };
 	size_t i;
 
-	alttabend();
 
 
 
@@ -1618,6 +1624,10 @@ movemouse(const Arg *arg)
 
 	XUngrabPointer(dpy, CurrentTime);
 	if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
+		if (c->tags & SPTAGMASK) {
+			c->mon->tagset[c->mon->seltags] ^= (c->tags & SPTAGMASK);
+			m->tagset[m->seltags] |= (c->tags & SPTAGMASK);
+		}
 		sendmon(c, m);
 		selmon = m;
 		focus(NULL);
@@ -1793,6 +1803,10 @@ resizemouse(const Arg *arg)
 	XUngrabPointer(dpy, CurrentTime);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 	if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
+		if (c->tags & SPTAGMASK) {
+			c->mon->tagset[c->mon->seltags] ^= (c->tags & SPTAGMASK);
+			m->tagset[m->seltags] |= (c->tags & SPTAGMASK);
+		}
 		sendmon(c, m);
 		selmon = m;
 		focus(NULL);
@@ -1902,6 +1916,7 @@ sendmon(Client *c, Monitor *m)
 	detach(c);
 	detachstack(c);
 	c->mon = m;
+	if (!(c->tags & SPTAGMASK))
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
 	attachx(c);
 	attachstack(c);
@@ -2143,6 +2158,10 @@ showhide(Client *c)
 	if (!c)
 		return;
 	if (ISVISIBLE(c)) {
+		if ((c->tags & SPTAGMASK) && c->isfloating) {
+			c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
+			c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
+		}
 		/* show clients top down */
 		if (!c->mon->lt[c->mon->sellt]->arrange && c->sfx != -9999 && !c->isfullscreen) {
 			XMoveResizeWindow(dpy, c->win, c->sfx, c->sfy, c->sfw, c->sfh);
@@ -2281,7 +2300,7 @@ toggleview(const Arg *arg)
 	if (newtagset) {
 		selmon->tagset[selmon->seltags] = newtagset;
 
-		if (newtagset == ~0)
+		if (newtagset == ~SPTAGMASK)
 		{
 			selmon->pertag->curtag = 0;
 		}
