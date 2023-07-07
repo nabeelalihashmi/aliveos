@@ -23,6 +23,8 @@
 #include "scratchpad.c"
 #include "vanitygaps.c"
 #include "warp.c"
+#include "xrdb.c"
+#include "seamless_restart.c"
 /* Layouts */
 #include "layout_facts.c"
 #include "layout_grid.c"

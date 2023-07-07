@@ -1,0 +1,24 @@
+super + Escape
+	pkill -USR1 -x sxhkd
+
+alt + ctrl + t
+	kitty
+
+# Fullscreen screenshot
+Print
+    scrot ~/Pictures/screenshot_%Y%m%d%H%M%S.png
+
+# Active window screenshot
+super + Print
+    scrot --focused --exec 'mv $f ~/Pictures/window_%Y%m%d%H%M%S.png'
+
+# Current monitor screenshot
+alt + Print
+    scrot --monitor "$HOME/Pictures/monitor_%Y%m%d%H%M%S.png"
+
+# Area screenshot
+shift + Print
+    scrot -s ~/Pictures/area_%Y%m%d%H%M%S.png
+
+super + e
+    pcmanfm

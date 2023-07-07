@@ -1017,7 +1017,7 @@ treset(void)
 	for (i = 0; i < 2; i++) {
 		tmoveto(0, 0);
 		tcursor(CURSOR_SAVE);
-		tclearregion(0, 0, term.col-1, term.row-1);
+		tclearregion(0, 0, term.maxcol-1, term.row-1);
 		tswapscreen();
 	}
 }
@@ -1052,7 +1052,7 @@ tscrolldown(int orig, int n)
 	LIMIT(n, 0, term.bot-orig+1);
 
 	tsetdirt(orig, term.bot-n);
-	tclearregion(0, term.bot-n+1, term.col-1, term.bot);
+	tclearregion(0, term.bot-n+1, term.maxcol-1, term.bot);
 
 	for (i = term.bot; i >= orig+n; i--) {
 		temp = term.line[i];
@@ -1088,7 +1088,7 @@ tscrollup(int orig, int n, int copyhist)
 			term.scr = MIN(term.scr + n, HISTSIZE-1);
 	}
 
-	tclearregion(0, orig, term.col-1, orig+n-1);
+	tclearregion(0, orig, term.maxcol-1, orig+n-1);
 	tsetdirt(orig+n, term.bot);
 
 	for (i = orig; i <= term.bot-n; i++) {
@@ -1238,8 +1238,8 @@ tclearregion(int x1, int y1, int x2, int y2)
 	if (y1 > y2)
 		temp = y1, y1 = y2, y2 = temp;
 
-	LIMIT(x1, 0, term.col-1);
-	LIMIT(x2, 0, term.col-1);
+	LIMIT(x1, 0, term.maxcol-1);
+	LIMIT(x2, 0, term.maxcol-1);
 	LIMIT(y1, 0, term.row-1);
 	LIMIT(y2, 0, term.row-1);
 
@@ -1548,7 +1548,7 @@ tsetmode(int priv, int set, const int *args, int narg)
 					break;
 				alt = IS_SET(MODE_ALTSCREEN);
 				if (alt) {
-					tclearregion(0, 0, term.col-1, term.row-1);
+					tclearregion(0, 0, term.maxcol-1, term.row-1);
 				}
 				if (set ^ alt) /* set is always 1 or 0 */
 					tswapscreen();
@@ -1608,7 +1608,7 @@ csihandle(void)
 {
 	char buffer[40];
 	int len;
-	int maxcol = term.col;
+	int maxcol = term.maxcol;
 
 	switch (csiescseq.mode[0]) {
 	default:
@@ -2615,8 +2615,14 @@ tresize(int col, int row)
 {
 	int i;
 	int j;
-	int minrow = MIN(row, term.row);
-	int mincol = MIN(col, term.col);
+	int tmp = col;
+	int minrow, mincol;
+
+	if (!term.maxcol)
+		term.maxcol = term.col;
+	col = MAX(col, term.maxcol);
+	minrow = MIN(row, term.row);
+	mincol = MIN(col, term.maxcol);
 	int *bp;
 	TCursor c;
 
@@ -2671,10 +2677,10 @@ tresize(int col, int row)
 		term.line[i] = xmalloc(col * sizeof(Glyph));
 		term.alt[i] = xmalloc(col * sizeof(Glyph));
 	}
-	if (col > term.col)
+	if (col > term.maxcol)
 	{
-		bp = term.tabs + term.col;
-		memset(bp, 0, sizeof(*term.tabs) * (col - term.col));
+		bp = term.tabs + term.maxcol;
+		memset(bp, 0, sizeof(*term.tabs) * (col - term.maxcol));
 
 		while (--bp > term.tabs && !*bp)
 			/* nothing */ ;
@@ -2682,7 +2688,8 @@ tresize(int col, int row)
 			*bp = 1;
 	}
 	/* update terminal size */
-	term.col = col;
+	term.col = tmp;
+	term.maxcol = col;
 	term.row = row;
 	/* reset scrolling region */
 	tsetscroll(0, row-1);

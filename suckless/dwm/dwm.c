@@ -113,6 +113,11 @@ enum {
 	WMLast
 }; /* default atoms */
 
+enum {
+	ClientFields,
+	ClientTags,
+	ClientLast
+}; /* dwm client atoms */
 
 enum {
 	ClkTagBar,
@@ -198,6 +203,7 @@ struct Client {
 	float cfact;
 	int x, y, w, h;
 	int sfx, sfy, sfw, sfh; /* stored float geometry, used on mode revert */
+	unsigned int idx;
 	int oldx, oldy, oldw, oldh;
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh, hintsvalid;
 	int bw, oldbw;
@@ -404,6 +410,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 };
 static Atom wmatom[WMLast], netatom[NetLast];
 static Atom xatom[XLast];
+static Atom clientatom[ClientLast];
 static volatile sig_atomic_t running = 1;
 static Cur *cursor[CurLast];
 static Clr **scheme;
@@ -654,6 +661,8 @@ cleanup(void)
 	size_t i;
 
 
+	for (m = mons; m; m = m->next)
+		persistmonitorstate(m);
 
 
 	selmon->lt[selmon->sellt] = &foo;
@@ -945,6 +954,7 @@ createmon(void)
 
 	}
 
+	restoremonitorstate(m);
 
 	return m;
 }
@@ -967,6 +977,7 @@ void
 detach(Client *c)
 {
 	Client **tc;
+	c->idx = 0;
 
 	for (tc = &c->mon->clients; *tc && *tc != c; tc = &(*tc)->next);
 	*tc = c->next;
@@ -1435,6 +1446,7 @@ void
 manage(Window w, XWindowAttributes *wa)
 {
 	Client *c, *t = NULL;
+	int settings_restored;
 	Window trans = None;
 	XWindowChanges wc;
 
@@ -1448,6 +1460,7 @@ manage(Window w, XWindowAttributes *wa)
 	c->h = c->oldh = wa->height;
 	c->oldbw = wa->border_width;
 	c->cfact = 1.0;
+	settings_restored = restoreclientstate(c);
 	updatetitle(c);
 
 
@@ -1456,9 +1469,11 @@ manage(Window w, XWindowAttributes *wa)
 		c->tags = t->tags;
 		c->bw = borderpx;
 	} else {
-		c->mon = selmon;
+		if (!settings_restored)
+			c->mon = selmon;
 		c->bw = borderpx;
-		applyrules(c);
+		if (!settings_restored)
+			applyrules(c);
 	}
 
 	if (c->x + WIDTH(c) > c->mon->wx + c->mon->ww)
@@ -2083,6 +2098,8 @@ setup(void)
 	wmatom[WMDelete] = XInternAtom(dpy, "WM_DELETE_WINDOW", False);
 	wmatom[WMState] = XInternAtom(dpy, "WM_STATE", False);
 	wmatom[WMTakeFocus] = XInternAtom(dpy, "WM_TAKE_FOCUS", False);
+	clientatom[ClientFields] = XInternAtom(dpy, "_DWM_CLIENT_FIELDS", False);
+	clientatom[ClientTags] = XInternAtom(dpy, "_DWM_CLIENT_TAGS", False);
 	netatom[NetActiveWindow] = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
 	netatom[NetSupported] = XInternAtom(dpy, "_NET_SUPPORTED", False);
 	netatom[NetSystemTray] = XInternAtom(dpy, "_NET_SYSTEM_TRAY_S0", False);
@@ -2224,9 +2241,16 @@ tagmon(const Arg *arg)
 {
 	Client *c = selmon->sel;
 	Monitor *dest;
+	int restored;
 	if (!c || !mons->next)
 		return;
 	dest = dirtomon(arg->i);
+	savewindowfloatposition(c, c->mon);
+	restored = restorewindowfloatposition(c, dest);
+	if (restored && (!dest->lt[dest->sellt]->arrange || c->isfloating)) {
+		XMoveResizeWindow(dpy, c->win, c->sfx, c->sfy, c->sfw, c->sfh);
+		resize(c, c->sfx, c->sfy, c->sfw, c->sfh, 1);
+	}
 	sendmon(c, dest);
 }
 
@@ -2769,6 +2793,8 @@ main(int argc, char *argv[])
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display");
 	checkotherwm();
+	XrmInitialize();
+	loadxrdb();
 	setup();
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)

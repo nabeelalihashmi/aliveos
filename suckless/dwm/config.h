@@ -30,7 +30,8 @@ static const char dmenufont[]            = "JetBrains Mono Nerd Font:size=12";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
-#include "../../dwm-themes/dracula.h";
+#include "/home/icon/.cache/wal/colors-wal-dwm.h";
+
 // static char normfgcolor[]                = "#bbbbbb";
 // static char normbgcolor[]                = "#222222";
 // static char normbordercolor[]            = "#444444";
@@ -288,6 +289,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
 	{ MODKEY|ShiftMask,             XK_q,          quit,                   {0} },
 	{ MODKEY|ControlMask|ShiftMask, XK_q,          quit,                   {1} },
+	{ MODKEY|ShiftMask,             XK_F5,         xrdb,                   {.v = NULL } },
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },

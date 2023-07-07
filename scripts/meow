@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# ASCII art
+# ASCII art
+cat << "EOF"
+      _,'  _.--...___..--;)
+     /_ \. __..- ,      ,--...--
+    <\    .`--'''       `     /'   
+     `-';'               ;   ; ;
+ __...--''     ___...--_..'  .;.'   
+(,__....----'''       (,..--''   
+
+Meow
+AliveOS
+EOF
+
+
+# Configuration options
+dwm_dir="/home/icon/AliveOS/suckless/dwm"
+wallpaper_dir="/home/icon/Wallpapers"
+
+# Check if filename argument is provided
+if [ $# -eq 0 ]; then
+    # Select a random file from the wallpaper directory
+    filename="$wallpaper_dir/$(ls "$wallpaper_dir" | shuf -n 1)"
+else
+    # Use the provided argument as the filename
+    filename="$1"
+fi
+
+notify-send "Generating Scheme"
+# Change wallpaper using 'wal'
+wal -i "$filename"
+
+notify-send "Compiling DWM"
+# Navigate to dwm directory
+cd "$dwm_dir" || exit 1
+
+# Clean and install dwm using sudo
+sudo make clean install
+
+notify-send "Done! Restart DWM"

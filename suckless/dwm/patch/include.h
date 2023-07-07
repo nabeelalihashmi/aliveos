@@ -21,8 +21,10 @@
 #include "placemouse.h"
 #include "restartsig.h"
 #include "scratchpad.h"
+#include "seamless_restart.h"
 #include "vanitygaps.h"
 #include "warp.h"
+#include "xrdb.h"
 /* Layouts */
 #include "layout_grid.h"
 #include "layout_monocle.h"

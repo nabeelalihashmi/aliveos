@@ -156,13 +156,14 @@ static void (*bartabmonfns[])(Monitor *) = { NULL /* , customlayoutfn */ };
 #if BAR_PANGO_PATCH
 static const char font[]                 = "monospace 10";
 #else
-static const char *fonts[]               = { "Ubuntu:size=11" };
+static const char *fonts[]               = { "Ubuntu:size=11", "FontAwesome:size:11" };
 #endif // BAR_PANGO_PATCH
 static const char dmenufont[]            = "JetBrains Mono Nerd Font:size=12";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
-#include "../../dwm-themes/dracula.h";
+#include "/home/icon/.cache/wal/colors-wal-dwm.h";
+
 // static char normfgcolor[]                = "#bbbbbb";
 // static char normbgcolor[]                = "#222222";
 // static char normbordercolor[]            = "#444444";

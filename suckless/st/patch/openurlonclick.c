@@ -20,7 +20,7 @@ isvalidurlchar(Rune u)
 static int
 findeowl(int row)
 {
-	int col = term.col - 1;
+	int col = term.maxcol - 1;
 
 	do {
 		if (TLINEURL(row)[col].mode & ATTR_WRAP)
@@ -79,7 +79,7 @@ detecturl(int col, int row, int draw)
 		url_maxcol = MAX(url_maxcol, x2);
 		url[j++] = TLINEURL(row)[col].u;
 		wrapped = TLINEURL(row)[col].mode & ATTR_WRAP;
-		if (++col >= term.col || wrapped) {
+		if (++col >= term.maxcol || wrapped) {
 			col = 0;
 			if (++row > maxrow || !wrapped)
 				break;
