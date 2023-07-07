@@ -4,6 +4,9 @@
 <a href='https://aliveforms.com'>By Aliveforms</a>
 </div>
 
-![Image](img/title.gif)
+![Image](img/title2.gif)
 
 ## Warning: Work in progress
+
+
+## Flexipatch Based Configs with Xrdb

@@ -31,5 +31,5 @@ fi
 notify-send "Generating Scheme"
 # Change wallpaper using 'wal'
 wal -i "$filename"
-
-notify-send "Done! Restart DWM"
+xdotool key Super+Shift+F5
+notify-send "Done!"
