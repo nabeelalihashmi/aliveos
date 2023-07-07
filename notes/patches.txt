@@ -23,7 +23,7 @@ SCRATCHPADS_PATCH
 VANITYGAPS_PATCH
 VANITYGAPS_MONOCLE_PATCH
 WARP_PATCH
-
+XRDB
 
 # Other changes:
 * removed color codes for theme

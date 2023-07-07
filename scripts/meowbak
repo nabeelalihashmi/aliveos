@@ -32,4 +32,11 @@ notify-send "Generating Scheme"
 # Change wallpaper using 'wal'
 wal -i "$filename"
 
+notify-send "Compiling DWM"
+# Navigate to dwm directory
+cd "$dwm_dir" || exit 1
+
+# Clean and install dwm using sudo
+sudo make clean install
+
 notify-send "Done! Restart DWM"

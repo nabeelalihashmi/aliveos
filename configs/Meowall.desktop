@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Action
+Name=Meowall
+Profiles=to_meowall
+
+[X-Action-Profile to_meowall]
+MimeTypes=image/*
+Exec=meowall %f
