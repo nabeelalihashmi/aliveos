@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# ASCII art
+# ASCII art
+cat << "EOF"
+      _,'  _.--...___..--;)
+     /_ \. __..- ,      ,--...--
+    <\    .`--'''       `     /'   
+     `-';'               ;   ; ;
+ __...--''     ___...--_..'  .;.'   
+(,__....----'''       (,..--''   
+
+Meow
+AliveOS
+EOF
+
+
+# Configuration options
+in_dir="/home/icon/AliveOS/suckless_flexipatch/dwm-flexipatch"
+out_dir="/home/icon/AliveOS/suckless/dwm"
+flexipatch_finalizer_dir="/home/icon/AliveOS/flexipatch-finalizer"
+
+
+cd $in_dir;
+rm config.h patches.h
+make
+
+cd $flexipatch_finalizer_dir;
+./flexipatch-finalizer.sh -r -d $in_dir -o $out_dir
+
+cd $out_dir
+rm config.h
+
+sudo make clean install
+
+# notify-send "Generating Scheme"
+# Change wallpaper using 'wal'
+xdotool key Super+Ctrl+Shift+q

@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Set the path to the settings file
+SETTINGS_FILE="$HOME/.config/aliveui/configslist.conf"
+
+# Read the editor value from the settings file
+EDITOR=$(awk -F= '/^editor/ {gsub(/"/,"",$2); print $2}' "$SETTINGS_FILE")
+
+# Read the files section from the settings file
+FILES_SECTION=$(awk '/^\[Files\]/ {p=1; next} /^\[/{p=0} p' "$SETTINGS_FILE")
+
+# Create an associative array to store the titles and paths
+declare -A config_files
+
+# Parse the files section and populate the associative array
+while IFS== read -r title path; do
+  title=$(echo "$title" | sed 's/"//g')
+  path=$(echo "$path" | sed 's/"//g')
+  if [[ ! -z "$title" && ! -z "$path" ]]; then
+    config_files["$title"]="$path"
+  fi
+done <<< "$FILES_SECTION"
+
+# Check if script is running in a terminal
+if [ -t 0 ]; then
+  # Use fzf to select a file from the list in a terminal
+  selected_file=$(printf '%s\n' "${!config_files[@]}" | fzf --prompt="Select a file: ")
+else
+  # Use dmenu to select a file from the list if not running in a terminal
+  selected_file=$(printf '%s\n' "${!config_files[@]}" | dmenu -p "Select a file: ")
+fi
+
+# Check if a file was selected
+if [ -n "$selected_file" ]; then
+  file_path="${config_files[$selected_file]}"
+
+  # Replace %f in editor with the selected file
+  editor_command=$(echo "$EDITOR" | sed "s~%f~$file_path~g")
+
+  # Display the opening message
+  echo "Opening file: $file_path"
+
+  # Open the selected file in the editor
+  exec $editor_command
+fi

@@ -28,8 +28,8 @@ else
     filename="$1"
 fi
 
-notify-send "Generating Scheme"
+# notify-send "Generating Scheme"
 # Change wallpaper using 'wal'
 wal -i "$filename"
 xdotool key Super+Shift+F5
-notify-send "Done!"
+# notify-send "Done!"

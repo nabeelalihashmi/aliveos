@@ -7,7 +7,7 @@ static const int corner_radius           = 10;
 #else
 static const unsigned int borderpx       = 2;   /* border pixel of windows */
 #endif // ROUNDED_CORNERS_PATCH
-static const unsigned int snap           = 16;  /* snap pixel */
+static const unsigned int snap           = 8;  /* snap pixel */
 #if SWALLOW_PATCH
 static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
 #endif // SWALLOW_PATCH
@@ -162,47 +162,49 @@ static const char dmenufont[]            = "JetBrains Mono Nerd Font:size=12";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
-//  #include "/home/icon/.cache/wal/colors-wal-dwm.h";
+#include "/home/icon/.cache/wal/colors-wal-dwm.h"
 
-static char normfgcolor[]                = "#bbbbbb";
-static char normbgcolor[]                = "#222222";
-static char normbordercolor[]            = "#444444";
-static char normfloatcolor[]             = "#db8fd9";
+// #include "../../dwm-themes/dracula.h"
 
-static char selfgcolor[]                 = "#eeeeee";
-static char selbgcolor[]                 = "#005577";
-static char selbordercolor[]             = "#005577";
-static char selfloatcolor[]              = "#005577";
+//static char normfgcolor[]                = "#bbbbbb";
+// static char normbgcolor[]                = "#222222";
+// static char normbordercolor[]            = "#444444";
+// static char normfloatcolor[]             = "#db8fd9";
 
-static char titlenormfgcolor[]           = "#bbbbbb";
-static char titlenormbgcolor[]           = "#222222";
-static char titlenormbordercolor[]       = "#444444";
-static char titlenormfloatcolor[]        = "#db8fd9";
+// static char selfgcolor[]                 = "#eeeeee";
+// static char selbgcolor[]                 = "#005577";
+// static char selbordercolor[]             = "#005577";
+// static char selfloatcolor[]              = "#005577";
 
-static char titleselfgcolor[]            = "#eeeeee";
-static char titleselbgcolor[]            = "#005577";
-static char titleselbordercolor[]        = "#005577";
-static char titleselfloatcolor[]         = "#005577";
+// static char titlenormfgcolor[]           = "#bbbbbb";
+// static char titlenormbgcolor[]           = "#222222";
+// static char titlenormbordercolor[]       = "#444444";
+// static char titlenormfloatcolor[]        = "#db8fd9";
 
-static char tagsnormfgcolor[]            = "#bbbbbb";
-static char tagsnormbgcolor[]            = "#222222";
-static char tagsnormbordercolor[]        = "#444444";
-static char tagsnormfloatcolor[]         = "#db8fd9";
+// static char titleselfgcolor[]            = "#eeeeee";
+// static char titleselbgcolor[]            = "#005577";
+// static char titleselbordercolor[]        = "#005577";
+// static char titleselfloatcolor[]         = "#005577";
 
-static char tagsselfgcolor[]             = "#eeeeee";
-static char tagsselbgcolor[]             = "#005577";
-static char tagsselbordercolor[]         = "#005577";
-static char tagsselfloatcolor[]          = "#005577";
+// static char tagsnormfgcolor[]            = "#bbbbbb";
+// static char tagsnormbgcolor[]            = "#222222";
+// static char tagsnormbordercolor[]        = "#444444";
+// static char tagsnormfloatcolor[]         = "#db8fd9";
 
-static char hidnormfgcolor[]             = "#005577";
-static char hidselfgcolor[]              = "#227799";
-static char hidnormbgcolor[]             = "#222222";
-static char hidselbgcolor[]              = "#222222";
+// static char tagsselfgcolor[]             = "#eeeeee";
+// static char tagsselbgcolor[]             = "#005577";
+// static char tagsselbordercolor[]         = "#005577";
+// static char tagsselfloatcolor[]          = "#005577";
 
-static char urgfgcolor[]                 = "#bbbbbb";
-static char urgbgcolor[]                 = "#222222";
-static char urgbordercolor[]             = "#ff0000";
-static char urgfloatcolor[]              = "#db8fd9";
+// static char hidnormfgcolor[]             = "#005577";
+// static char hidselfgcolor[]              = "#227799";
+// static char hidnormbgcolor[]             = "#222222";
+// static char hidselbgcolor[]              = "#222222";
+
+// static char urgfgcolor[]                 = "#bbbbbb";
+// static char urgbgcolor[]                 = "#222222";
+// static char urgbordercolor[]             = "#ff0000";
+// static char urgfloatcolor[]              = "#db8fd9";
 
 #if RENAMED_SCRATCHPADS_PATCH
 static char scratchselfgcolor[]          = "#FFF7D4";
@@ -494,8 +496,10 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	// RULE(.class = "Gimp", .tags = 1 << 4)
-	RULE(.class = "nitrogen", .isfloating = 1)
-	RULE(.class = "simplescreenrecorder", .isfloating = 1)
+	RULE(.class = "Nitrogen", .isfloating = 1)
+	RULE(.class = "SimpleCcreenRecorder", .isfloating = 1)
+	RULE(.class = "Pcmanfm", .isfloating = 1)
+
 	#if RENAMED_SCRATCHPADS_PATCH
 	RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
 	#elif SCRATCHPADS_PATCH

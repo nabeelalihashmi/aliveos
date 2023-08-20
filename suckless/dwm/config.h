@@ -2,7 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx       = 2;   /* border pixel of windows */
-static const unsigned int snap           = 16;  /* snap pixel */
+static const unsigned int snap           = 8;  /* snap pixel */
 static const unsigned int gappih         = 8;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 8;  /* vert inner gap between windows */
 static const unsigned int gappoh         = 8;  /* horiz outer gap between windows and screen edge */
@@ -30,47 +30,49 @@ static const char dmenufont[]            = "JetBrains Mono Nerd Font:size=12";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
-//  #include "/home/icon/.cache/wal/colors-wal-dwm.h";
+#include "/home/icon/.cache/wal/colors-wal-dwm.h"
 
-static char normfgcolor[]                = "#bbbbbb";
-static char normbgcolor[]                = "#222222";
-static char normbordercolor[]            = "#444444";
-static char normfloatcolor[]             = "#db8fd9";
+// #include "../../dwm-themes/dracula.h"
 
-static char selfgcolor[]                 = "#eeeeee";
-static char selbgcolor[]                 = "#005577";
-static char selbordercolor[]             = "#005577";
-static char selfloatcolor[]              = "#005577";
+//static char normfgcolor[]                = "#bbbbbb";
+// static char normbgcolor[]                = "#222222";
+// static char normbordercolor[]            = "#444444";
+// static char normfloatcolor[]             = "#db8fd9";
 
-static char titlenormfgcolor[]           = "#bbbbbb";
-static char titlenormbgcolor[]           = "#222222";
-static char titlenormbordercolor[]       = "#444444";
-static char titlenormfloatcolor[]        = "#db8fd9";
+// static char selfgcolor[]                 = "#eeeeee";
+// static char selbgcolor[]                 = "#005577";
+// static char selbordercolor[]             = "#005577";
+// static char selfloatcolor[]              = "#005577";
 
-static char titleselfgcolor[]            = "#eeeeee";
-static char titleselbgcolor[]            = "#005577";
-static char titleselbordercolor[]        = "#005577";
-static char titleselfloatcolor[]         = "#005577";
+// static char titlenormfgcolor[]           = "#bbbbbb";
+// static char titlenormbgcolor[]           = "#222222";
+// static char titlenormbordercolor[]       = "#444444";
+// static char titlenormfloatcolor[]        = "#db8fd9";
 
-static char tagsnormfgcolor[]            = "#bbbbbb";
-static char tagsnormbgcolor[]            = "#222222";
-static char tagsnormbordercolor[]        = "#444444";
-static char tagsnormfloatcolor[]         = "#db8fd9";
+// static char titleselfgcolor[]            = "#eeeeee";
+// static char titleselbgcolor[]            = "#005577";
+// static char titleselbordercolor[]        = "#005577";
+// static char titleselfloatcolor[]         = "#005577";
 
-static char tagsselfgcolor[]             = "#eeeeee";
-static char tagsselbgcolor[]             = "#005577";
-static char tagsselbordercolor[]         = "#005577";
-static char tagsselfloatcolor[]          = "#005577";
+// static char tagsnormfgcolor[]            = "#bbbbbb";
+// static char tagsnormbgcolor[]            = "#222222";
+// static char tagsnormbordercolor[]        = "#444444";
+// static char tagsnormfloatcolor[]         = "#db8fd9";
 
-static char hidnormfgcolor[]             = "#005577";
-static char hidselfgcolor[]              = "#227799";
-static char hidnormbgcolor[]             = "#222222";
-static char hidselbgcolor[]              = "#222222";
+// static char tagsselfgcolor[]             = "#eeeeee";
+// static char tagsselbgcolor[]             = "#005577";
+// static char tagsselbordercolor[]         = "#005577";
+// static char tagsselfloatcolor[]          = "#005577";
 
-static char urgfgcolor[]                 = "#bbbbbb";
-static char urgbgcolor[]                 = "#222222";
-static char urgbordercolor[]             = "#ff0000";
-static char urgfloatcolor[]              = "#db8fd9";
+// static char hidnormfgcolor[]             = "#005577";
+// static char hidselfgcolor[]              = "#227799";
+// static char hidnormbgcolor[]             = "#222222";
+// static char hidselbgcolor[]              = "#222222";
+
+// static char urgfgcolor[]                 = "#bbbbbb";
+// static char urgbgcolor[]                 = "#222222";
+// static char urgbordercolor[]             = "#ff0000";
+// static char urgfloatcolor[]              = "#db8fd9";
 
 
 
@@ -176,8 +178,10 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	// RULE(.class = "Gimp", .tags = 1 << 4)
-	RULE(.class = "nitrogen", .isfloating = 1)
-	RULE(.class = "simplescreenrecorder", .isfloating = 1)
+	RULE(.class = "Nitrogen", .isfloating = 1)
+	RULE(.class = "SimpleCcreenRecorder", .isfloating = 1)
+	RULE(.class = "Pcmanfm", .isfloating = 1)
+
 	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
 };
 
@@ -269,20 +273,20 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
 	{ MODKEY,                       XK_Return,     zoom,                   {0} },
-	{ MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,          incrgaps,               {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_i,          incrigaps,              {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_i,          incrigaps,              {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_o,          incrogaps,              {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_o,          incrogaps,              {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_6,          incrihgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_6,          incrihgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_7,          incrivgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_7,          incrivgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_8,          incrohgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_8,          incrohgaps,             {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_9,          incrovgaps,             {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_9,          incrovgaps,             {.i = -1 } },
+	// { MODKEY|Mod4Mask,              XK_u,          incrgaps,               {.i = +1 } },
+	// { MODKEY|Mod4Mask|ShiftMask,    XK_u,          incrgaps,               {.i = -1 } },
+	// { MODKEY|Mod4Mask,              XK_i,          incrigaps,              {.i = +1 } },
+	// { MODKEY|Mod4Mask|ShiftMask,    XK_i,          incrigaps,              {.i = -1 } },
+	// { MODKEY|Mod4Mask,              XK_o,          incrogaps,              {.i = +1 } },
+	// { MODKEY|Mod4Mask|ShiftMask,    XK_o,          incrogaps,              {.i = -1 } },
+	// { MODKEY|Mod4Mask,              XK_6,          incrihgaps,             {.i = +1 } },
+	// { MODKEY|Mod4Mask|ShiftMask,    XK_6,          incrihgaps,             {.i = -1 } },
+	// { MODKEY|Mod4Mask,              XK_7,          incrivgaps,             {.i = +1 } },
+	// { MODKEY|Mod4Mask|ShiftMask,    XK_7,          incrivgaps,             {.i = -1 } },
+	// { MODKEY|Mod4Mask,              XK_8,          incrohgaps,             {.i = +1 } },
+	// { MODKEY|Mod4Mask|ShiftMask,    XK_8,          incrohgaps,             {.i = -1 } },
+	// { MODKEY|Mod4Mask,              XK_9,          incrovgaps,             {.i = +1 } },
+	// { MODKEY|Mod4Mask|ShiftMask,    XK_9,          incrovgaps,             {.i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_0,          togglegaps,             {0} },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },

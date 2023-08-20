@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# ASCII art
+# ASCII art
+cat << "EOF"
+      _,'  _.--...___..--;)
+     /_ \. __..- ,      ,--...--
+    <\    .`--'''       `     /'
+     `-';'               ;   ; ;
+ __...--''     ___...--_..'  .;.'
+(,__....----'''       (,..--''
+
+Meow
+AliveOS
+EOF
+
+#!/bin/bash
+
+
+
+# if [[ "$@" == *"-s"* ]]; then
+  # wpg -s $(wpg -l | fzf)
+# else
+  # wpg -m
+# fi
+
+if [[ "$@" == *"-w"* ]]; then
+  last_argument="${@: -1}"
+  wpg -s "$last_argument"
+elif [[ "$@" == *"-s"* ]]; then
+  wpg -s "$(wpg -l | fzf)"
+else
+  wpg -m
+fi
+
+
+if [[ "$@" == *"-a"* ]]; then
+	wpg -A $(wpg -c) && wpg -s $(wpg -c)
+fi
+
+if [[ "$@" == *"-z"* ]]; then
+	wpg -R $(wpg -c) && wpg -s $(wpg -c)
+fi
+
+if [[ "$@" == *"-r"* ]]; then
+	wpg -R $(wpg -c) && wpg -s $(wpg -c)
+fi
+
+
+if [[ "$@" == *"-q"* ]]; then
+  xdotool key Super+Shift+Ctrl+q
+else
+  xdotool key Super+Shift+F5
+fi

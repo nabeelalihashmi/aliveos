@@ -11,7 +11,7 @@ time_to_empty=$(grep -E "time to empty" <<< "$battery_info" | awk '{print $4 " "
 
 # Determine the state symbol
 if [ "$state" = "charging" ]; then
-  state_symbol=""
+  state_symbol=""
 elif [ "$state" = "discharging" ]; then
   if [ "$percentage" -le 10 ]; then
     state_symbol=""
@@ -35,7 +35,7 @@ elif [ "$state" = "discharging" ]; then
     state_symbol=""
   fi
 else
-  state_symbol=""
+  state_symbol="o"
 fi
 
 # Determine whether to display time to empty or time to full
@@ -48,4 +48,4 @@ else
 fi
 
 # Display battery information
-echo "$state_symbol $percentage% ($time_info)"
+echo "$state_symbol  $percentage% ($time_info)"
